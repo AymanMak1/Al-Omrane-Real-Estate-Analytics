@@ -1,0 +1,88 @@
+---
+title: "R Notebook"
+---
+
+L'installation des packages nécessaires
+```{r}
+install.packages("plm", repos="http://R-Forge.R-project.org")
+```
+
+Le chargement des librairies nécessaire
+
+```{r}
+library(dplyr)
+library(caTools)
+library(randomForest)
+library(Amelia)
+library(ggplot2)
+library(plotly)
+library(ggthemes)
+```
+
+```{r}
+# Importer les donnée qui ont dans le fichier Omrane.csv qui est dans la même répertoire
+data <- read.csv(file = "./Omrane_V3.csv", header = TRUE, sep="\t", dec=",")
+data$X <- NULL
+# les premières observations des données
+head(data, n=3)
+
+# les dernières observations des données
+tail(data)
+
+
+print(paste("Nombre d'observations",nrow(data) , sep = " "))
+print(paste("Nombre de colonnes:",ncol(data)  , sep = " "))
+
+# La structure des attributs
+str(data)
+
+# Statiques de bases sur l'ensemble des attributs
+summary(data)
+#describe(data)
+
+# Les valeurs non-observés pour chaque attribut
+missmap(data)
+
+```
+
+- calculer des statistiques descriptives de base
+```{r}
+#mean sd
+```
+
+
+Pre-Processing, correction et nettoyage des données
+
+```{r}
+
+# generer une liste des indexes aléatoires
+shuffle_index <- sample(1:nrow(data))
+
+# On va utiliser ses indexes pour mélanger les donnée
+data <- data[shuffle_index, ]
+
+# Conversion de la variable cible d'une forme numérique au forme catégorielle 
+#data <- mutate(data, Potability = factor(Potability, levels = c(0, 1), labels = c('No', 'Yes')))
+glimpse(data)
+
+```
+
+```{r}
+set.seed(2) #2 représente 20% de chaque groupe
+sample = sample.split(data, SplitRatio = .80)
+sample
+
+# Données d'apprentissage
+train_data = subset(data, sample==TRUE)
+
+# Données de test
+test_data = subset(data, sample==FALSE)
+```
+```{r}
+model <- lm(Prix.unitaire ~., data = train_data)
+summary(model)
+pred = predict(model, test_data)
+pred
+plot(Prix.unitaire, type="l", lty = 1.8, col="red")
+```
+

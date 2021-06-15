@@ -21,7 +21,7 @@ library(ggthemes)
 
 ```{r}
 # Importer les donnée qui ont dans le fichier Omrane.csv qui est dans la même répertoire
-data <- read.csv(file = "./Omrane_V3.csv", header = TRUE, sep="\t", dec=",")
+data <- read.csv(file = "./Omrane.csv", header = TRUE, sep="\t", dec=",")
 data$X <- NULL
 # les premières observations des données
 head(data, n=3)
@@ -45,11 +45,6 @@ missmap(data)
 
 ```
 
-- calculer des statistiques descriptives de base
-```{r}
-#mean sd
-```
-
 
 Pre-Processing, correction et nettoyage des données
 
@@ -65,7 +60,121 @@ data <- data[shuffle_index, ]
 #data <- mutate(data, Potability = factor(Potability, levels = c(0, 1), labels = c('No', 'Yes')))
 glimpse(data)
 
+
+set.seed(2) #2 représente 20% de chaque groupe
+n = 700 
+sample= data[sample(1:nrow(data),n), ]
+
 ```
+
+
+EDA Explatory Data Analysis
+```{r}
+# 1.0 EDA REPORT
+library(tidyverse)
+library(DataExplorer)
+library(corrplot)
+
+# EDA with DataExplorer
+config <- configure_report(
+  #add_plot_str = FALSE,
+  #add_plot_qq = FALSE,
+  add_plot_prcomp = FALSE,
+  #add_plot_boxplot = FALSE,
+  #add_plot_scatterplot = FALSE,
+  global_ggtheme = quote(theme_minimal(base_size = 14))
+)
+
+data %>% create_report(
+  output_file = "Omrane_Population_Report",
+  #y="Description",
+  report_title = "EDA Report - Omrane Population",
+  config = config
+)
+
+sample %>% create_report(
+  output_file = "Omrane_Sample_Report",
+  #y="Description",
+  report_title = "EDA Report - Omrane Sample",
+  config = config
+)
+
+# 2.0 Data Introduction
+data %>% introduce()
+data %>% plot_intro()
+
+# 3.0 Missing Values
+
+data %>% plot_missing()
+data %>% profile_missing()
+
+# 4.0 Continuous Features
+
+data %>% plot_density()
+data %>% plot_histogram()
+
+# 5.0 Categorical Features (Explore Categorical Variables with Fisher's & Chi-Square)
+
+data %>% plot_bar()
+plot_bar(data, by = "Description")
+
+# 6.0 Relationship
+
+data %>% plot_correlation()
+
+
+# 7.0 Slicing & dicing
+# plot_scatterplot(data, by = "Description", sampled_rows = 1000L)
+
+
+library(SmartEDA)
+library(ISLR)
+library(ggstatsplot)
+
+ExpCatViz(
+  data %>%
+    select(Description, TotalAvances),
+  target="Description"
+)
+
+
+mdata = cor(data)
+
+corrplot(mdata, method="circle")
+
+
+ggbarstats(data = sample, x = Description, y= TotalAvances, labels= "both")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Machine Learning Model
 
 ```{r}
 set.seed(2) #2 représente 20% de chaque groupe
@@ -85,4 +194,3 @@ pred = predict(model, test_data)
 pred
 plot(Prix.unitaire, type="l", lty = 1.8, col="red")
 ```
-

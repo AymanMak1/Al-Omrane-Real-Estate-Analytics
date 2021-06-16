@@ -1,0 +1,91 @@
+ranking the "best" college side hustles💰: which are worth your time??
+https://www.youtube.com/watch?v=Swcp0_l65lw
+
+
+Pre-Processing, correction et nettoyage des données, making it eda ready (fixing variables types, mutation des valeurs )
+
+Imputation
+https://www.youtube.com/watch?v=Akb401i32Oc
+Reports
+https://www.youtube.com/watch?v=sKrWYE63Vk4
+https://cran.r-project.org/web/packages/DataExplorer/vignettes/dataexplorer-intro.html
+
+
+Exploratory Data Analysis Interpretation
+https://r4ds.had.co.nz/exploratory-data-analysis.html
+https://data.library.virginia.edu/understanding-q-q-plots/
+https://www.ucd.ie/ecomodel/Resources/QQplots_WebVersion.html
+https://cran.r-project.org/web/packages/dlookr/vignettes/EDA.html
+
+
+
+
+k-Medoid clustering using PAM / K-means / Clustering Algorithms for segmentation Analytics
+Apply Principal Component Analysis (PCA) technique to perform dimensionality reduction and data visualization
+Curso Completo de Machine Learning en Microsoft Power BI
+
+https://www.youtube.com/watch?v=ZVZHknMJ4N0
+Customer Segmentation as "the practice of dividing a customer base into groups
+of individuals that are similar in specific ways relevant to marketing"
+
+Behavioural Segmentation : the way customers interact with the service and how they
+purchase or their interest patterns
+
+
+https://www.youtube.com/results?search_query=segmentation+in+R
+https://www.youtube.com/watch?v=vxgz_q-BDhw
+https://github.com/ironfrown/r-examples/tree/master/clustering
+https://www.youtube.com/watch?v=Zuq1jh8PWpo
+https://www.coursera.org/projects/segment-your-market-using-factor-analysis-with-r-programming
+
+
+Power BI Customization
+https://www.youtube.com/watch?v=ZBBVxSra-xY
+https://www.youtube.com/watch?v=WspwLOp3UxA
+
+
+To Watch	
+https://www.youtube.com/watch?v=uYeYKUNjytA
+https://www.youtube.com/watch?v=7EVrtPlVtpc
+https://www.youtube.com/watch?v=3u7MQz1EyPY
+
+
+
+Charts :
+	- client par rapport au operation (chhal dar men operation)
+	- client par rapport au reste a payer
+	- client par rapport au flos li 7et fel omran 
+	- client li ka isalo flous 
+	- dial operations lghalyin 
+
+	Overview Section :
+		- Cards Count
+		- Number of client in the monthly basis (Area Chart)
+		- Count of Customers by Description (Clustered bar chart / Stacked Barchrt)
+		- Different Product Type
+	
+
+Relations:
+	Prix Total  = Prix unitaire * Superficie	
+	Total versement = Sigma Vers n
+	Reste a payer = Prix Total - Total Versement
+	Total avances = Total versement
+
+
+Column of Usage
+	- Description Designation Type unite Type produit
+	- Superficie Prix Unitaire Prix Total
+	- Client
+	- Désignation type de document
+	- la date de création	
+	- Trop perçu réglé / Trop percu non regle
+
+
+https://www.skylinetechnologies.com/Blog/Skyline-Blog/June_2018/4-steps-successful-business-intelligence-project
+1 Dashboard Creation in power bi
+2 Advance data visualization with an interpretation
+3 R studio for machine learning models
+4 Solution for a Regression or Classification Problematic
+5 Creation the two ML Models ( Supervised or Unsupervised models )
+6 In depth research about the ml models in order to compare them and showing the upside and downside of each model
+	

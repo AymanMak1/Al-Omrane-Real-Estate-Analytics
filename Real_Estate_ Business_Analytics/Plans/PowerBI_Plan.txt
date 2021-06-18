@@ -1,0 +1,30 @@
+Charts :
+	- le type de produit le plus apprecie (Oriental et par region)
+	- le type d'unite le plus apprecie (Oriental et par region)
+	- le type de contrat le plus apprecie
+	- Client ina type produit w unite w ina region w ina type de document  order by TotalAvanes 
+	
+
+Relations:
+	Prix Total  = Prix unitaire * Superficie	
+	Total versement = Sigma Vers n
+	Reste a payer = Prix Total - Total Versement
+	Total avances = Total versement
+
+
+Column of Usage
+	- Description Designation Type unite Type produit
+	- Superficie Prix Unitaire Prix Total
+	- Client
+	- Désignation type de document
+	- la date de création	
+	- Trop perçu réglé / Trop percu non regle
+
+
+Power BI
+https://www.youtube.com/watch?v=ZBBVxSra-xY
+https://www.youtube.com/watch?v=WspwLOp3UxA
+https://www.youtube.com/watch?v=uYeYKUNjytA
+https://www.youtube.com/watch?v=7EVrtPlVtpc
+https://www.youtube.com/watch?v=3u7MQz1EyPY
+

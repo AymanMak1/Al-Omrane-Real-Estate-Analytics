@@ -255,5 +255,5 @@ eda_report(
 
 Segment your market using factor analysis
 ```{r}
-
+distances = dist(data[17:26], method ="euclidean")
 ```

@@ -1,0 +1,32 @@
+ranking the "best" college side hustles💰: which are worth your time??
+https://www.youtube.com/watch?v=Swcp0_l65lw
+
+
+Pre-Processing, correction et nettoyage des données, making it eda ready (fixing variables types, mutation des valeurs )
+Imputation
+https://www.youtube.com/watch?v=Akb401i32Oc
+
+
+Segmentation : 
+
+	k-Medoid clustering using PAM / K-means / Clustering Algorithms for segmentation Analytics
+	Apply Principal Component Analysis (PCA) technique to perform dimensionality reduction and data visualization
+	Curso Completo de Machine Learning en Microsoft Power BI
+
+	https://www.youtube.com/watch?v=ZVZHknMJ4N0
+	Customer Segmentation as "the practice of dividing a customer base into groups
+	of individuals that are similar in specific ways relevant to marketing"
+	Behavioural Segmentation : the way customers interact with the service and how they
+	purchase or their interest patterns
+
+
+	https://www.youtube.com/results?search_query=segmentation+in+R
+	https://www.youtube.com/watch?v=vxgz_q-BDhw
+	https://github.com/ironfrown/r-examples/tree/master/clustering
+	https://www.youtube.com/watch?v=Zuq1jh8PWpo
+	https://www.coursera.org/projects/segment-your-market-using-factor-analysis-with-r-programming
+
+
+
+https://www.skylinetechnologies.com/Blog/Skyline-Blog/June_2018/4-steps-successful-business-intelligence-project
+	

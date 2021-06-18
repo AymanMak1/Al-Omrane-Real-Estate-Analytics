@@ -4,7 +4,7 @@ title: "Omrane"
 
 L'installation des packages nécessaires
 ```{r}
-install.packages("TeX")
+install.packages("ggcorrplot")
 ```
 
 Le chargement des librairies nécessaire
@@ -21,7 +21,9 @@ library(ggplot2)
 library(plotly)
 library(ggthemes)
 library(corrplot)
+library(ggcorrplot)
 library(ggstatsplot)
+library(ggpubr)
 
 # EDA REPORT
 library(dlookr)
@@ -46,7 +48,7 @@ library(Hmisc)
 ```{r}
 # Importer les donnée qui ont dans le fichier Omrane.csv qui est dans la même répertoire
 data <- read.csv(file = "./Omrane.csv", header = TRUE, sep="\t", dec=",")
-data$X <- NULL
+#data$X <- NULL
 # les premières observations des données
 head(data, n=3)
 
@@ -72,7 +74,9 @@ missmap(data)
 Pre-Processing, correction et nettoyage des données
 
 ```{r}
-data = select(data, -32)
+# deleting the columns that we don't need in our analysis
+data = select(data, c(-"N..Lot",-"TitreFoncier",-"CIN.RC",-"DateDeCréation"))
+colnames(data)[16] <- "DésignationTypeDeDocument"
 # generer une liste des indexes aléatoires
 shuffle_index <- sample(1:nrow(data))
 
@@ -111,7 +115,7 @@ plot_na_intersect(data)
 #vis_miss(data) %>% ggplotly()
 
 #to reduce bias we remove the two variables
-data = select(data, c(-25,-26))
+data = select(data, c(-"DateLivraison",-"DateContrat"))
 
 # to impute the numeric continueous missing values & outliers we're going to use machine learning algorithms :
 # rpart - Recursive Partitioning and Regression Trees.
@@ -162,6 +166,7 @@ data %>% create_report(
 )
 
 ?create_report
+
 sample %>% create_report(
   output_file = "Omrane_Sample_Report",
   #y="Description",
@@ -208,10 +213,20 @@ plot_bar(data, by = "Description")
 
 
 
-# 6.0 Relationship
+# 6.0 Relationship non-parametric Kendall OR spearman
 ggplotly(plot_correlation(data))
 #cor.ci(data, method="spearman")
+ggcorrmat(data=data, output="dataframe")
 
+
+# Normality Diagnosis
+plot_qq(data)
+plot_qq(data, by="Description")
+#ggqqplot(data, "Superficie", facet.by = "Description")
+
+
+d = ggbetweenstats(data = data, x = Description, y = TotalAvances, type= "np")
+ggplotly(d)
 ```
 
 EDA with SmartEDA
@@ -228,10 +243,17 @@ EDA with dlookr
 ```{r eval=F}
 eda_report(
       data,  
-      #target = "PrixUnitaire", 
+      target = "Description", 
       output_format = "html",
       output_file = "Omrane_dlookrEDA.html",
       output_dir = ".",
     )
 ?eda_report
+```
+
+
+
+Segment your market using factor analysis
+```{r}
+
 ```

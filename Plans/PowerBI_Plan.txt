@@ -22,9 +22,13 @@ Column of Usage
 
 
 Power BI
-https://www.youtube.com/watch?v=ZBBVxSra-xY
 https://www.youtube.com/watch?v=WspwLOp3UxA
 https://www.youtube.com/watch?v=uYeYKUNjytA
 https://www.youtube.com/watch?v=7EVrtPlVtpc
 https://www.youtube.com/watch?v=3u7MQz1EyPY
+
+
+
+TotalAvances total for Client = 
+CALCULATE(SUM('Omrane'[TotalAvances]), ALLSELECTED('Omrane'[Client]))
 

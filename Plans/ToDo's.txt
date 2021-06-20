@@ -1,3 +1,21 @@
+- Fill in the placeholders in PowerBI and the website
+- Change the color of the report header
+.page-header {
+    background-color: #CF4EF7 !important;
+    background-image: linear-gradient(120deg,#CF4EF7,#6A17E6) !important;
+}
+.main-content table th {
+    background-color: #6A17E6 !important;
+}
+
+- ML & Shiny web app : https://www.youtube.com/watch?v=tfN10IUX9Lo
+https://shiny.rstudio.com/tutorial/
+
+
+
+
+
+
 ranking the "best" college side hustles💰: which are worth your time??
 https://www.youtube.com/watch?v=Swcp0_l65lw
 
@@ -29,4 +47,8 @@ Segmentation :
 
 
 https://www.skylinetechnologies.com/Blog/Skyline-Blog/June_2018/4-steps-successful-business-intelligence-project
+
+
+
+
 	

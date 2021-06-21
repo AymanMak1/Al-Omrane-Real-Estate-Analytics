@@ -14,11 +14,6 @@ regions = c(distinct(dataml,Description))
 designation = distinct(dataml,Designation)
 typesUnite = c(distinct(dataml,TypeUnité))
 typesProduit = c(distinct(dataml,TypeProduit))
-
-
-library(shiny)
-library(shinythemes)
-
 #set.seed(100)
 #train <- sample(nrow(dataml), 0.7*nrow(dataml), replace = FALSE)
 #TrainSet <- dataml[train,]
@@ -31,6 +26,8 @@ print(model)
 
 
 
+library(shiny)
+library(shinythemes)
 # Define UI for application that draws a histogram
 ui <- fluidPage( theme = shinytheme("superhero"),
     shinythemes::themeSelector(), 
@@ -78,7 +75,8 @@ ui <- fluidPage( theme = shinytheme("superhero"),
                 value = 100,
                 step=100
             ),
-            actionButton("submit", "Submit", class= "btn btn-primary")
+            #actionButton("submit", "Submit", class= "btn btn-primary")
+            submitButton("submit")
         ),
         
 
@@ -96,21 +94,22 @@ server <- function(input, output) {
     
     datasetInput <- reactive({  
         
-        # Region, Type Unite, Type Produit, Superficie
+        # Region, Type Unite, Type Produit, Superficie  
         df <- data.frame(
             Name = c("Region",
-                     "typeUnite",
                      "typeProduit",
-                     "Superficie"),
+                     "Superficie",
+                     "PrixUnitaire"),
             Value = as.character(c(input$Region,
-                                   input$typeUnite,
                                    input$typeProduit,
-                                   input$Superficie)),
+                                   input$Superficie,
+                                   input$PrixUnitaire)
+                                 ),
             stringsAsFactors = FALSE)
         
         PrixTotal <- "PrixTotal"
         df <- rbind(df, PrixTotal)
-        input <- transpose(df)
+        input <- t(df)
         write.table(input,"input.csv", sep=",", quote = FALSE, row.names = FALSE, col.names = FALSE)
         
         test <- read.csv(paste("input", ".csv", sep=""), header = TRUE)
@@ -120,25 +119,17 @@ server <- function(input, output) {
         
         Output <- data.frame(Prediction=predict(model,test), round(predict(model,test,type="prob"), 3))
         print(Output)
-        
     })
     
-    output$contents <- renderPrint({
-        if (input$submitbutton>0) { 
-            isolate("Calculation complete.") 
-        } else {
-            return("Server is ready for calculation.")
-        }
-    })
-    
-    output$result <- renderText({
-    
-        if (input$submitbutton>0) { 
-            #paste("You chose", input$Region)
-            isolate(datasetInput()) 
-        }
-        
-    })
+   output$contents <- renderPrint({
+       #isolate(datasetInput()) 
+       datasetInput()
+       paste("You chose", input$Region)
+   })
+   
+   output$result <- renderText({
+        paste("You chose", input$Region)
+   })
 }
 
 # Run the application 

@@ -75,7 +75,7 @@ Pre-Processing, correction et nettoyage des données
 
 ```{r}
 # deleting the columns that we don't need in our analysis
-data = select(data, c(-"N..Lot",-"TitreFoncier",-"CIN.RC",-"DateDeCréation","S"))
+data = select(data, c(-"N..Lot",-"TitreFoncier",-"CIN.RC",-"DateDeCréation"))
 colnames(data)[16] <- "DésignationTypeDeDocument"
 # generer une liste des indexes aléatoires
 shuffle_index <- sample(1:nrow(data))
@@ -255,11 +255,12 @@ eda_report(
 
 library(shiny)
 data.ml = select(data, c(-"Opération",-"Division",-"Client",-"NombreUnité",-"TypeDocument",
-                         -"VersRegularis",-"TropPerçuRéglé", -"TropPerçuNonRéglé",-"TotalAvances",-"Dossier",-"NuméroClient",
-                         -"Vers1",-"Vers2",-"Vers3",-"TotalVersement",-"DésignationTypeDeDocument"))
+                         -"VersRegularis",-"TropPerçuRéglé", -"TropPerçuNonRéglé",-"ResteàPayer",-"StatutADV",-"Création",
+                         -"TotalAvances",-"Dossier",-"NuméroClient",-"Vers1",-"Vers2",-"Vers3",-"TotalVersement",-"DésignationTypeDeDocument"))
 data.ml = select(data.ml,c(-"DésignationTypeDeDocument"))
 
 
 summary(data.ml)
+write.csv(data.ml,"data-ml.csv")
 
 ```

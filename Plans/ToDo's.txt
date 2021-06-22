@@ -1,3 +1,7 @@
+- Removing outliers
+	https://www.r-bloggers.com/2020/01/how-to-remove-outliers-in-r/
+
+
 - Fill in the placeholders in PowerBI and the website
 - Change the color of the report header
 .page-header {

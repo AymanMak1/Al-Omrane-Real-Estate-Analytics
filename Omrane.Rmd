@@ -244,16 +244,14 @@ eda_report(
 
 
 
-
+making the data machine learning ready to create create a regression predictive model of Al Omrane Products Prices
 ```{r}
 #Echantiollonage
 #set.seed(2) #2 représente 20% de chaque groupe
 #n = 700 
 #sample= data[sample(1:nrow(data),n), ]
-
 # 7 -> 10
 
-library(shiny)
 data.ml = select(data, c(-"Opération",-"Division",-"Client",-"NombreUnité",-"TypeDocument",
                          -"VersRegularis",-"TropPerçuRéglé", -"TropPerçuNonRéglé",-"ResteàPayer",-"StatutADV",-"Création",
                          -"TotalAvances",-"Dossier",-"NuméroClient",-"Vers1",-"Vers2",-"Vers3",-"TotalVersement",-"DésignationTypeDeDocument"))
@@ -263,4 +261,10 @@ data.ml = select(data.ml,c(-"DésignationTypeDeDocument"))
 summary(data.ml)
 write.csv(data.ml,"data-ml.csv")
 
+```
+
+
+```{r}
+ggbetweenstats(data,
+Superficie, breaks, outlier.tagging = TRUE)
 ```

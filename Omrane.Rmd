@@ -4,7 +4,7 @@ title: "Omrane"
 
 L'installation des packages nécessaires
 ```{r}
-install.packages("ggcorrplot")
+#   install.packages("ggcorrplot")
 ```
 
 Le chargement des librairies nécessaire
@@ -14,6 +14,7 @@ Le chargement des librairies nécessaire
 library(dplyr)
 library(tidyverse)
 library(caTools)
+
 library(lubridate)
 
 # Visualization
@@ -47,7 +48,7 @@ library(Hmisc)
 
 ```{r}
 # Importer les donnée qui ont dans le fichier Omrane.csv qui est dans la même répertoire
-data <- read.csv(file = "./Omrane.csv", header = TRUE, sep="\t", dec=",")
+data <- read.csv(file = "./Datasets/Omrane.csv", header = TRUE, sep="\t", dec=",")
 #data$X <- NULL
 # les premières observations des données
 head(data, n=3)
@@ -70,9 +71,7 @@ describe(data)
 missmap(data)
 ```
 
-
 Pre-Processing, correction et nettoyage des données
-
 ```{r}
 # deleting the columns that we don't need in our analysis
 data = select(data, c(-"N..Lot",-"TitreFoncier",-"CIN.RC",-"DateDeCréation"))
@@ -107,15 +106,26 @@ L'imputation des valeurs manquantes
 data %>% plot_missing()
 # since the two columns DateContrat and DateLivraison are 100% missing and the company can't provide a new dataset that fix the problem of the missing Feautures unless they are very important and less than 50% in the case we could use them in Analysis in our case the mentioned variables should be dropped
 plot_na_pareto(data, only_na = TRUE)
-ggplotly(plot_na_pareto(data,  only_na = TRUE))
+# ggplotly(plot_na_pareto(data,  only_na = TRUE))
 # the problem with pareto chart is that we don't know whether the missing values in different columns belong to the same row of observations
-
 # so visualize the missing values across columns
 plot_na_intersect(data)
 #vis_miss(data) %>% ggplotly()
 
 #to reduce bias we remove the two variables
 data = select(data, c(-"DateLivraison",-"DateContrat"))
+data<-data[!(data$PrixUnitaire==0),]
+
+
+
+data.without.outliers = subset(data, Vers1 != 0)
+
+data %>% create_report(
+  output_file = "OA",
+  #y="Description",
+  report_title = "EDA Report - Omrane Population",
+  config = config
+)
 
 # to impute the numeric continueous missing values & outliers we're going to use machine learning algorithms :
 # rpart - Recursive Partitioning and Regression Trees.
@@ -134,6 +144,43 @@ data = select(data, c(-"DateLivraison",-"DateContrat"))
 #Miss Ranger Imputation
 #data_imputed <- missRanger(data_na, formula = . ~ ., num.trees = 1000, seed = 3)
 ```
+
+
+
+Univariate Analysis for numeric variables
+```{r}
+densityVers2 = density(data$TotalVersement, bw = 1000)
+histVers2 = hist(data$TotalVersement, bw = 1000)
+densityDivision = density(data$Division)
+histDivision = hist(data$Division)
+
+plot(histVers2)
+plot(densityVers2)
+plot(histDivision)
+plot(densityDivision)
+
+
+
+#Echantiollonage
+#set.seed(2) #2 représente 20% de chaque groupe
+#n = 4000 
+#sample= data[sample(1:nrow(data),n), ]
+# 7 -> 10
+
+#A p-value less than 0.05 (typically ≤ 0.05) is statistically significant. ...
+#A p-value higher than 0.05 (> 0.05) is not statistically significant and indicates strong evidence for the null
+#If P(real) = 0.9, there is only a 10% chance that the null hypothesis is true at the outset.
+# value of the Shapiro-Wilk Test is greater than 0.05, the data is normal. If it is below 0.05, the data significantly deviate from a normal distribution. If you need to use skewness and kurtosis values to determine normality, rather the Shapiro-Wilk test, you will find these in our enhanced testing for normality guide.
+
+shapiro.test(data$Division[0:5000])
+shapiro.test(data$Vers1[0:5000])
+shapiro.test(data.without.outliers$Vers1[0:5000])
+
+wilcox.test(data$Vers1)
+```
+
+
+
 
 EDA Explatory Data Analysis with DataExplorer
 ```{r}
@@ -178,8 +225,6 @@ data %>% plot_missing()
 data %>% profile_missing()
 
 
-
-
 # 4.0 Continuous Features
 data %>% plot_density()
 data %>% plot_histogram()
@@ -194,7 +239,6 @@ data %>%
   #group_by(Description) %>%
   diagnose_numeric() %>%
   flextable()
-
 
 
 
@@ -220,6 +264,8 @@ d = ggbetweenstats(data = data, x = Description, y = TotalAvances, type= "np")
 ggplotly(d)
 ```
 
+
+
 EDA with SmartEDA
 ```{r}
 ExpReport(
@@ -242,29 +288,36 @@ eda_report(
 ?eda_report
 ```
 
-
-
 making the data machine learning ready to create create a regression predictive model of Al Omrane Products Prices
 ```{r}
-#Echantiollonage
-#set.seed(2) #2 représente 20% de chaque groupe
-#n = 700 
-#sample= data[sample(1:nrow(data),n), ]
-# 7 -> 10
-
 data.ml = select(data, c(-"Opération",-"Division",-"Client",-"NombreUnité",-"TypeDocument",
                          -"VersRegularis",-"TropPerçuRéglé", -"TropPerçuNonRéglé",-"ResteàPayer",-"StatutADV",-"Création",
                          -"TotalAvances",-"Dossier",-"NuméroClient",-"Vers1",-"Vers2",-"Vers3",-"TotalVersement",-"DésignationTypeDeDocument"))
-data.ml = select(data.ml,c(-"DésignationTypeDeDocument"))
-
-
+#data.ml = select(data.ml,c(-"DésignationTypeDeDocument"))
 summary(data.ml)
-write.csv(data.ml,"data-ml.csv")
+colnames(data.ml)[3] <- "TypeUnite"
+write.csv(data.ml,"data-ml.csv",row.names = FALSE)
 
+
+
+# Create random forest for regression
+#pu.rf <- randomForest(PrixUnitaire ~ ., data = data.ml, mtry = 3,
+#                        importance = TRUE, na.action = na.omit)
+
+#print(pu.rf)
+#plot(pu.rf)
+#conf <- pu.rf$confusion
+
+
+
+#lm = lm(PrixUnitaire ~ ., data= data.ml)
+#Pred <- predict(lm, data.ml)
+#summary(lm)
 ```
 
 
+Removing Outliers
 ```{r}
 ggbetweenstats(data,
-Superficie, breaks, outlier.tagging = TRUE)
+Superficie, PrixTotal, outlier.tagging = TRUE)
 ```

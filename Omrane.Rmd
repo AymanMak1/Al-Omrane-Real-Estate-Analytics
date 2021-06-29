@@ -145,6 +145,15 @@ data %>% create_report(
 #data_imputed <- missRanger(data_na, formula = . ~ ., num.trees = 1000, seed = 3)
 ```
 
+Removing Outliers
+```{r}
+boxplot(data$Superficie)
+boxplot(data$PrixUnitaire)
+data<-data[!(data$PrixUnitaire==2600000.00),]
+data<-data[!(data$PrixUnitaire==170300.00),]
+data<-data[!(data$Superficie==21020.0),]
+```
+
 
 
 Univariate Analysis for numeric variables
@@ -158,9 +167,6 @@ plot(histVers2)
 plot(densityVers2)
 plot(histDivision)
 plot(densityDivision)
-
-
-
 #Echantiollonage
 #set.seed(2) #2 représente 20% de chaque groupe
 #n = 4000 
@@ -288,36 +294,32 @@ eda_report(
 ?eda_report
 ```
 
+
 making the data machine learning ready to create create a regression predictive model of Al Omrane Products Prices
+
+
+
 ```{r}
 data.ml = select(data, c(-"Opération",-"Division",-"Client",-"NombreUnité",-"TypeDocument",
                          -"VersRegularis",-"TropPerçuRéglé", -"TropPerçuNonRéglé",-"ResteàPayer",-"StatutADV",-"Création",
-                         -"TotalAvances",-"Dossier",-"NuméroClient",-"Vers1",-"Vers2",-"Vers3",-"TotalVersement",-"DésignationTypeDeDocument"))
+                         -"TotalAvances",-"Dossier",-"NuméroClient",-"Vers1",-"Vers2",-"Vers3",-"TotalVersement",-"DésignationTypeDeDocument",-"PrixTotal"))
 #data.ml = select(data.ml,c(-"DésignationTypeDeDocument"))
 summary(data.ml)
 colnames(data.ml)[3] <- "TypeUnite"
-write.csv(data.ml,"data-ml.csv",row.names = FALSE)
-
-
-
-# Create random forest for regression
-#pu.rf <- randomForest(PrixUnitaire ~ ., data = data.ml, mtry = 3,
-#                        importance = TRUE, na.action = na.omit)
-
-#print(pu.rf)
-#plot(pu.rf)
-#conf <- pu.rf$confusion
-
-
-
-#lm = lm(PrixUnitaire ~ ., data= data.ml)
-#Pred <- predict(lm, data.ml)
-#summary(lm)
 ```
 
-
-Removing Outliers
+Removing Outliers from the dataset that will be used in creating the machine learning models
 ```{r}
-ggbetweenstats(data,
-Superficie, PrixTotal, outlier.tagging = TRUE)
+# Removing Outliers
+#boxplot(data.ml$Superficie)
+#boxplot(data.ml$PrixUnitaire)
+#data.ml<-data.ml[!(data.ml$PrixUnitaire==2600000.00),]
+#data.ml<-data.ml[!(data.ml$PrixUnitaire==170300.00),]
+#data.ml<-data.ml[!(data.ml$Superficie==21020.0),]
+#data.ml_out_rm = data.ml[!data.ml %in% boxplot.stats(data.ml)$out]
+
+
+
+write.csv(data.ml,"data-ml.csv",row.names = FALSE)
 ```
+

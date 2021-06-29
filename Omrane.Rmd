@@ -2,19 +2,21 @@
 title: "Omrane"
 ---
 
+
+
 L'installation des packages nécessaires
 ```{r}
-#   install.packages("ggcorrplot")
+  install.packages("ggcorrplot")
 ```
 
-Le chargement des librairies nécessaire
 
+
+Le chargement des librairies nécessaire
 ```{r}
 # Manipulation
 library(dplyr)
 library(tidyverse)
 library(caTools)
-
 library(lubridate)
 
 # Visualization
@@ -46,7 +48,11 @@ library(Hmisc)
 
 ```
 
+
+
+Importation
 ```{r}
+options(scipen = 999, "digits"=3)
 # Importer les donnée qui ont dans le fichier Omrane.csv qui est dans la même répertoire
 data <- read.csv(file = "./Datasets/Omrane.csv", header = TRUE, sep="\t", dec=",")
 #data$X <- NULL
@@ -70,6 +76,8 @@ describe(data)
 # Les valeurs non-observés pour chaque attribut
 missmap(data)
 ```
+
+
 
 Pre-Processing, correction et nettoyage des données
 ```{r}
@@ -97,7 +105,23 @@ data$DateLivraison <- ymd(data$DateLivraison)
 
 
 sapply(data, class)
+
+
+# Fixing Relation between the variables
+data$PrixTotal = data$Superficie * data$PrixUnitaire
+data$TotalVersement = data$Vers1 + data$Vers2 + data$Vers3
+data = select(data,-"TotalAvances")
+
+data$ResteàPayer = data$PrixTotal - data$TotalVersement
+nrow(data[data$ResteàPayer < 0,])
+data<-data[!(data$ResteàPayer < 0),]
+
+# Every Product should have a Unite Price
+data<-data[!(data$PrixUnitaire==0),]
+# to purchase a product you need pay the Vers1
+data = subset(data, Vers1 != 0)
 ```
+
 
 
 L'imputation des valeurs manquantes
@@ -114,18 +138,6 @@ plot_na_intersect(data)
 
 #to reduce bias we remove the two variables
 data = select(data, c(-"DateLivraison",-"DateContrat"))
-data<-data[!(data$PrixUnitaire==0),]
-
-
-
-data.without.outliers = subset(data, Vers1 != 0)
-
-data %>% create_report(
-  output_file = "OA",
-  #y="Description",
-  report_title = "EDA Report - Omrane Population",
-  config = config
-)
 
 # to impute the numeric continueous missing values & outliers we're going to use machine learning algorithms :
 # rpart - Recursive Partitioning and Regression Trees.
@@ -145,6 +157,8 @@ data %>% create_report(
 #data_imputed <- missRanger(data_na, formula = . ~ ., num.trees = 1000, seed = 3)
 ```
 
+
+
 Removing Outliers
 ```{r}
 boxplot(data$Superficie)
@@ -152,13 +166,16 @@ boxplot(data$PrixUnitaire)
 data<-data[!(data$PrixUnitaire==2600000.00),]
 data<-data[!(data$PrixUnitaire==170300.00),]
 data<-data[!(data$Superficie==21020.0),]
+
+sum(data$TotalVersement)
+sum(data$TotalAvances)
 ```
 
 
 
 Univariate Analysis for numeric variables
 ```{r}
-densityVers2 = density(data$TotalVersement, bw = 1000)
+densityVers2 = density(data$TotalVersement)
 histVers2 = hist(data$TotalVersement, bw = 1000)
 densityDivision = density(data$Division)
 histDivision = hist(data$Division)
@@ -187,8 +204,9 @@ wilcox.test(data$Vers1)
 
 
 
-
 EDA Explatory Data Analysis with DataExplorer
+
+- DataExplorer
 ```{r}
 # EDA with 
 
@@ -265,14 +283,11 @@ plot_qq(data)
 plot_qq(data, by="Description")
 #ggqqplot(data, "Superficie", facet.by = "Description")
 
-
-d = ggbetweenstats(data = data, x = Description, y = TotalAvances, type= "np")
-ggplotly(d)
 ```
 
 
 
-EDA with SmartEDA
+- EDA with SmartEDA
 ```{r}
 ExpReport(
      data, 
@@ -282,7 +297,9 @@ ExpReport(
 ?ExpReport
 ```
 
-EDA with dlookr
+
+
+- EDA with dlookr
 ```{r eval=F}
 eda_report(
       data,  
@@ -295,10 +312,8 @@ eda_report(
 ```
 
 
-making the data machine learning ready to create create a regression predictive model of Al Omrane Products Prices
 
-
-
+Preparing data for the ML Models
 ```{r}
 data.ml = select(data, c(-"Opération",-"Division",-"Client",-"NombreUnité",-"TypeDocument",
                          -"VersRegularis",-"TropPerçuRéglé", -"TropPerçuNonRéglé",-"ResteàPayer",-"StatutADV",-"Création",
@@ -308,7 +323,9 @@ summary(data.ml)
 colnames(data.ml)[3] <- "TypeUnite"
 ```
 
-Removing Outliers from the dataset that will be used in creating the machine learning models
+
+
+Exporting Datasets
 ```{r}
 # Removing Outliers
 #boxplot(data.ml$Superficie)
@@ -317,9 +334,7 @@ Removing Outliers from the dataset that will be used in creating the machine lea
 #data.ml<-data.ml[!(data.ml$PrixUnitaire==170300.00),]
 #data.ml<-data.ml[!(data.ml$Superficie==21020.0),]
 #data.ml_out_rm = data.ml[!data.ml %in% boxplot.stats(data.ml)$out]
-
-
-
 write.csv(data.ml,"data-ml.csv",row.names = FALSE)
+write.csv(data,"data.csv",row.names = FALSE)
 ```
 

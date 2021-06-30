@@ -277,7 +277,7 @@ plot_bar(data, by = "Description")
 
 
 # 6.0 Relationship non-parametric Kendall OR spearman
-ggplotly(plot_correlation(data))
+ggplotly(plot_correlation(data.clean))
 #cor.ci(data, method="spearman")
 ggcorrmat(data=data, output="dataframe")
 

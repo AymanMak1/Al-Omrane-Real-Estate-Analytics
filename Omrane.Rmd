@@ -165,10 +165,10 @@ data.clean = select(data.clean, c(-"DateLivraison",-"DateContrat"))
 ```
 
 
-
+Outliers
 ```{r}
 boxplot(data.clean$Superficie)
-boxplot(data.clean$PrixUnitaire)
+   boxplot(data.clean$PrixUnitaire)
 data.clean<-data.clean[!(data.clean$PrixUnitaire==2600000.00),]
 data.clean<-data.clean[!(data.clean$PrixUnitaire==170300.00),]
 data.clean<-data.clean[!(data.clean$Superficie==21020.0),]
@@ -342,3 +342,7 @@ write.csv(data.ml,"data-ml.csv",row.names = FALSE)
 write.csv(data,"data.csv",row.names = FALSE)
 ```
 
+```{r}
+summary(data.clean$Vers2)
+max(data.clean$Superficie)
+```
